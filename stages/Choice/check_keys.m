@@ -39,6 +39,8 @@ while ~exit_key
                 keysPressed.times = [keysPressed.times, secs];
                 keysPressed.names = [keysPressed.names, {device_opt.abort}];
             end
+
+            if isequal(keysPressed.names, []); exit_key = false; continue; end
             break; % now not saving 'return'
         end
         
