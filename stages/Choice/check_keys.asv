@@ -28,23 +28,32 @@ while ~exit_key
     [keyIsDown, secs, keyCode] = KbCheck;
     
     if keyIsDown
+
         % exit with Return(space)/Escape
         if any(keyCode(device_opt.confirm)) || ... % strcmp(keyName, device_opt.confirm) || ... % enter
                 any(keyCode(device_opt.confirm2)) || ... % space
                 keyCode(device_opt.abort) % strcmp(keyName, device_opt.abort)
             exit_key = true;
 
-            if keyCode(device_opt.abort); abort = true; end
+            if keyCode(device_opt.abort)
+                abort = true; 
+                keysPressed.times = [keysPressed.times, secs];
+                keysPressed.names = [keysPressed.names, {device_opt.abort}];
+            end
+
+            if isequal(keysPressed.names, []); exit_key = false; continue; end
             break; % now not saving 'return'
         end
         
         % Store only the newly pressed key.
-        keyCode_newPress = keyCode-previous_keyCode == 1;
+        keyCode_newPress = find(keyCode-previous_keyCode == 1);
         if any(keyCode_newPress)
             keysPressed.times = [keysPressed.times, secs];
             
             keyName = KbName(keyCode_newPress);
             keyName=remove_string(keyName); % remove extra string for number key presses
+
+            if ~isempty(str2num)
             keysPressed.names = [keysPressed.names, {keyName}];
             
             % photodiode for each touch for now
@@ -160,4 +169,6 @@ end
 end
 
 %% changelog
-% Kokalas 
+% Kokalas @ 2024/8/6
+%   - Added new Output: abort (check if the abort key was pressed in specific)    
+%   - Stored the pressing of the escape Key

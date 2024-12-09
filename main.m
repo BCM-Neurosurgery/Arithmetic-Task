@@ -68,14 +68,7 @@ function main(varargin)
                 %% Saving stage (Part 1 of ITI)
                 % Generate a Log
                 times.save_start_t = GetSecs();
-                logMsg = sprintf('Trial %d Save Start', path_opt.curr_trial);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 16777060, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
 
                 % Conduct ITI
                 present_ITI(visual_opt); % only photodiode
@@ -83,13 +76,8 @@ function main(varargin)
                 
                 % Generate an end log
                 logMsg = sprintf('Trial %d Save End', path_opt.curr_trial);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 16777060, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
+
                 save_duration = GetSecs()-times.save_start_t; % saving time
            
             case 0 
@@ -97,13 +85,7 @@ function main(varargin)
                 % Generate a start log
                 times.ITI_start_t = GetSecs();
                 logMsg = sprintf('Trial %d ITI Start', path_opt.curr_trial + 1);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 16777215, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
 
                 % Add number of trials.
                 path_opt.curr_trial	= path_opt.curr_trial + 1;
@@ -126,13 +108,8 @@ function main(varargin)
                 
                 % Generate an end log
                 logMsg = sprintf('Trial %d ITI End', path_opt.curr_trial);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 16777215, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
+
                 times.ITI_end_t = GetSecs();
                 times.ITI_len = times.ITI_end_t-times.ITI_start_t;
     
@@ -147,25 +124,13 @@ function main(varargin)
                 % Generate a start log
                 times.present_start_t = GetSecs();
                 logMsg = sprintf('Trial %d Presentation Start', path_opt.curr_trial);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 65535, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
 
                 stage_idx = stage_present(visual_opt, game_opt, curr_opt);
                 
                 % Generate an end log
                 logMsg = sprintf('Trial %d Presentation End', path_opt.curr_trial);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 65535, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
 
                 % Time control.
                 times.present_end_t = GetSecs();
@@ -182,13 +147,7 @@ function main(varargin)
                 % Generate a start log
                 times.choice_start_t = GetSecs();
                 logMsg = sprintf('Trial %d Choice Start', path_opt.curr_trial);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 9830655, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
         
 
                 [times.RT, keyProfile, stage_idx] = stage_choice(...
@@ -196,13 +155,8 @@ function main(varargin)
 
                 % Generate an end log
                 logMsg = sprintf('Trial %d Choice End', path_opt.curr_trial);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 9830655, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
+
                 times.choice_end_t = GetSecs();
                 
             case 3
@@ -210,26 +164,15 @@ function main(varargin)
                 % Generate a Start Log
                 times.feedback_start_t = GetSecs();
                 logMsg = sprintf('Trial %d Feedback Start', path_opt.curr_trial);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 16750080, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
                 
                 [curr_opt, game_opt, stage_idx] = stage_feedback(...
                     visual_opt, game_opt, device_opt, curr_opt,keyProfile);
 
                 % Generate an end log 
                 logMsg = sprintf('Trial %d Feedback End', path_opt.curr_trial);
-                eventLog = [eventLog; {logMsg, GetSecs()}];
-                switch ExpEnv
-                    case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
-                        try         for i=1:numel(onlineNSP); cbmex('comment', 16750080, 0, logMsg,'instance',onlineNSP(i)-1); end
-                        catch ME;   disp(ME);
-                        end
-                end
+                make_event(logMsg);
+
                 times.feedback_end_t = GetSecs();
                 
             case 21 
@@ -267,6 +210,17 @@ function main(varargin)
     %% Clear the screen and reset
 	sca;
 	Priority(0);
+
+
+    function make_event(LogMsg)
+        eventLog = [eventLog; {LogMsg, GetSecs()}];
+        switch ExpEnv
+            case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
+                try         for i=1:numel(onlineNSP); cbmex('comment', 16750080, 0, LogMsg,'instance',onlineNSP(i)-1); end
+                catch ME;   disp(ME);
+                end
+        end
+    end
 end
 
 

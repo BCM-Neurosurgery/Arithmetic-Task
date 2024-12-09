@@ -28,6 +28,7 @@ while ~exit_key
     [keyIsDown, secs, keyCode] = KbCheck;
     
     if keyIsDown
+
         % exit with Return(space)/Escape
         if any(keyCode(device_opt.confirm)) || ... % strcmp(keyName, device_opt.confirm) || ... % enter
                 any(keyCode(device_opt.confirm2)) || ... % space
@@ -45,13 +46,18 @@ while ~exit_key
         end
         
         % Store only the newly pressed key.
-        keyCode_newPress = keyCode-previous_keyCode == 1;
+        keyCode_newPress = find(keyCode-previous_keyCode == 1);
         if any(keyCode_newPress)
             keysPressed.times = [keysPressed.times, secs];
             
-            keyName = KbName(keyCode_newPress);
+            keyName = KbName(keyCode_newPress(1));
             keyName=remove_string(keyName); % remove extra string for number key presses
-            keysPressed.names = [keysPressed.names, {keyName}];
+
+            if ~isnan(str2double(keyName)) || strcmpi(keyName,'Return') || strcmpi(keyName, '-')
+                keysPressed.names = [keysPressed.names, {keyName}];
+            elseif strcmpi(keyName, 'BackSpace') && width(keysPressed.names) > 0
+                keysPressed.names = keysPressed.names(1:end-1);
+            end
             
             % photodiode for each touch for now
             %                 if id_first_touch
