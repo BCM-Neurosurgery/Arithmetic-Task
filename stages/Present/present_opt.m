@@ -35,5 +35,5 @@ function present_opt(visual_opt, game_opt, curr_str, curr_pos, symbol, phd_on)
     end
     
     Screen('Flip', visual_opt.window);
-
+% send comment here
 end

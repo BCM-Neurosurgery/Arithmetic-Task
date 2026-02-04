@@ -16,7 +16,7 @@ function visual_opt = set_visual()
     Screen('Preference', 'VisualDebugLevel', 0);
     Screen('Preference', 'SkipSyncTests', 1);
     Screen('Preference', 'Verbosity', 0); % Hides Psychtoolbox Warnings
-	screen = max( Screen('Screens') );  % select what screen to use 
+	screen =  1;%max( Screen('Screens') );  % select what screen to use 
 
     [window, windowRect] ...
         = Screen('OpenWindow', screen, 0); % default is black
@@ -32,7 +32,7 @@ function visual_opt = set_visual()
     one_frame    = 1/59; 
 
     %% 4. Presentation.
-    textSize = 70; % 40
+    textSize = 110; % 40
     textStyle = 1; % bold
     
     %% misc stimulus positions

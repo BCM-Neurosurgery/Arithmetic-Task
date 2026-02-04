@@ -3,7 +3,7 @@ function main(varargin)
     %%	Number Cognition TASK CODE.
     % Each trial, the computer poses a math problem.
     %   Computer randomly selects either {addition, subtraction}
-    %   Computer randomly selectsa number from {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
+    %   Computer randomly selects a number from {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
     %   Computer randomly selects either {prefix format, reverse polish (postfix)}
     %   Computer randomly selects 3 locations on the monitor (out of 12, in a 3x4 grid)
     
@@ -41,12 +41,25 @@ function main(varargin)
                 disp(ME)
                 ID = 'EMUtest';
             end
+        otherwise
+            onlineNSP = ''
     end
 
     %% Initialize
     % autoclear(); % not exist
     verbose = false; % true; % false; % Mostly for debugging
-    [visual_opt,device_opt, game_opt, path_opt] = stage_initialize(ID);
+    save_path = "C:\Users\EMU - Behavior\Documents\MATLAB\PatientData";
+    switch ExpEnv
+        case 'emu' 
+            try
+                [visual_opt,device_opt, game_opt, path_opt] = stage_initialize(ID, save_path, EMUnum);
+            catch ME
+                disp(ME)
+                [visual_opt,device_opt, game_opt, path_opt] = stage_initialize(ID, save_path, -1);
+            end
+        otherwise
+            [visual_opt,device_opt, game_opt, path_opt] = stage_initialize(ID, save_path, -1);
+    end
     
     %% Task starts
     if verbose
@@ -82,7 +95,8 @@ function main(varargin)
                 stage_idx = save_data(curr_opt, keyProfile, times, ID, path_opt,device_opt);
                 
                 % Generate an end log
-                logMsg = sprintf('Trial %d Save End', path_opt.curr_trial);
+                logMsg = sprintf(['T' ...
+                    'rial %d Save End'], path_opt.curr_trial);
                 eventLog = [eventLog; {logMsg, GetSecs()}];
                 switch ExpEnv
                     case 'emu'     % If we set the EMU as the exprimental environment, get the EMU number
@@ -155,7 +169,7 @@ function main(varargin)
                         end
                 end
 
-                stage_idx = stage_present(visual_opt, game_opt, curr_opt);
+                stage_idx = stage_present(visual_opt, game_opt, curr_opt, path_opt, onlineNSP, ExpEnv);
                 
                 % Generate an end log
                 logMsg = sprintf('Trial %d Presentation End', path_opt.curr_trial);
@@ -192,8 +206,7 @@ function main(varargin)
         
 
                 [times.RT, keyProfile, stage_idx] = stage_choice(...
-                    visual_opt, game_opt, device_opt, curr_opt);
-
+                    visual_opt, game_opt, device_opt, curr_opt, path_opt, onlineNSP, ExpEnv);
                 % Generate an end log
                 logMsg = sprintf('Trial %d Choice End', path_opt.curr_trial);
                 eventLog = [eventLog; {logMsg, GetSecs()}];
@@ -218,8 +231,8 @@ function main(varargin)
                         end
                 end
                 
-                [curr_opt, game_opt, stage_idx] = stage_feedback(...
-                    visual_opt, game_opt, device_opt, curr_opt,keyProfile);
+                [curr_opt, game_opt, stage_idx] = stage_feedback_exact(...
+                            visual_opt, game_opt, device_opt, curr_opt, keyProfile); % AC correct feedback implementation 03/2025
 
                 % Generate an end log 
                 logMsg = sprintf('Trial %d Feedback End', path_opt.curr_trial);

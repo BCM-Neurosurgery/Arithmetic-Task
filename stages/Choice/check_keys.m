@@ -1,4 +1,4 @@
-function [keysPressed,visual_opt, abort] = check_keys(device_opt,varargin)
+function [keysPressed,visual_opt, abort] = check_keys(device_opt, path_opt, onlineNSP, ExpEnv, varargin)
 
     % Loop until 'Enter' is pressed
     % varargin for photodiode off
@@ -47,14 +47,29 @@ while ~exit_key
         % Store only the newly pressed key.
         keyCode_newPress = keyCode-previous_keyCode == 1;
         if any(keyCode_newPress)
-            keysPressed.times = [keysPressed.times, secs];
-            
             keyName = KbName(keyCode_newPress);
-            keyName=remove_string(keyName); % remove extra string for number key presses
-            keysPressed.names = [keysPressed.names, {keyName}];
-            
+            keyName = remove_string(keyName); % remove extra string for number key presses
+            if strcmpi(keyName, 'backspace') % AC 03/2025 fix backspace 
+                if ~isempty(keysPressed.names)
+                    keysPressed.names(end) = [];
+                    keysPressed.times(end) = [];
+                end
+            else
+                keysPressed.times = [keysPressed.times, secs];
+                keysPressed.names = [keysPressed.names, {keyName}];
+            end
             % photodiode for each touch for now
             %                 if id_first_touch
+            % add comment for recording keystrokes
+            logMsg = sprintf('Trial %d Keypress: %s', path_opt.curr_trial, keyName);
+            switch ExpEnv
+                case 'emu'     % If we se
+                    % t the EMU as the exprimental environment, get the EMU number
+                    try         for i=1:numel(onlineNSP); cbmex('comment', 9830655, 0, logMsg,'instance',onlineNSP(i)-1); end
+                    catch ME;   disp(ME);
+                    end
+            
+           end
             visual_opt=present_photodiode(visual_opt,keysPressed.names);
             %                     id_first_touch = false;
             %                 end

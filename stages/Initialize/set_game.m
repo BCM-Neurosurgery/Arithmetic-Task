@@ -12,7 +12,7 @@ function game_opt = set_game(visual_opt)
     
     t_resolution = 1/1000;
 
-    sess_trs = 3; % assuming 30min / (5sec/trial) = 360 trials
+    sess_trs = 300; % assuming 30min / (5sec/trial) = 360 trials
     
     %% 2. Task specific
     % operation
@@ -21,7 +21,7 @@ function game_opt = set_game(visual_opt)
     
     % number
     min_num = 0;
-    max_num = 16;
+    max_num = 10;
     max_min_ratio = max_num/(max([1 min_num]));
     num_samples = 2;
     len_samples = 2;
@@ -30,6 +30,8 @@ function game_opt = set_game(visual_opt)
     
     % presentation (notation)
     pres_type = { 'prefix', 'postfix'}; % rev_pol=postfix     , 'infix'
+    % pres_type = {'infix'}; % rev_pol=postfix     , 'infix'
+
     num_pres = length(pres_type);
     
     % format

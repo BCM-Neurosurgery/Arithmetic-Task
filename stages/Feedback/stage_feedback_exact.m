@@ -1,5 +1,5 @@
-function [curr_opt, game_opt, stage_idx] = stage_feedback(...
-                            visual_opt, game_opt, device_opt, curr_opt,keyProfile)
+function [curr_opt, game_opt, stage_idx] = stage_feedback_exact(...
+                            visual_opt, game_opt, ~, curr_opt, keyProfile) %AC 03/2025 correct feedback! no staircase method with adaptive threshold!!
                         
     visual_opt.feedback_t1 = GetSecs();
     form = curr_opt.curr_format;
@@ -17,22 +17,12 @@ function [curr_opt, game_opt, stage_idx] = stage_feedback(...
     
     % decide correct vs incorrect
     error = abs(target_num-response_num);
-    if error <= game_opt.(['correct_range_' form])
-        id_correct =true;
+    if error == 0
+        id_correct = true;
     else
         id_correct = false;
     end
         
-    % update error threshold staircase
-    if id_correct
-        game_opt.(['correct_range_' form]) = ...
-            game_opt.(['correct_range_' form]) - game_opt.(['down_correct_' form]);
-        % ensure threshold does not go below a minimum (0.5) AC 03/2025
-        game_opt.(['correct_range_' form]) = max(game_opt.(['correct_range_' form]), 0.5);
-    else
-        game_opt.(['correct_range_' form]) = ...
-            game_opt.(['correct_range_' form]) + game_opt.(['up_error_' form]);
-    end
         
     % set up color
     if id_correct

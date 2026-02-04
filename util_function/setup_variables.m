@@ -9,7 +9,7 @@ function [device_opt] = setup_variables( )
     Screen('Preference', 'VisualDebugLevel', 0);
     Screen('Preference', 'Verbosity', 0);       % Hides Psychtoolbox Warnings
 	screens             = Screen( 'Screens' );  % Initialize the Screen
-	visual_opt.screen   = min( screens );       % select what screen to use (not needed when using Eyelink)
+	visual_opt.screen   = 1 ;                              % select what screen to use (not needed when using Eyelink)min( screens ); 
 
     [ visual_opt.window, visual_opt.windowRect ]            = Screen( 'OpenWindow', visual_opt.screen, [50, 50, 50], [0, 0, 400, 400], [], [], [], 1 );
     [ visual_opt.screenXpixels, visual_opt.screenYpixels ]  = Screen( 'WindowSize', visual_opt.window );

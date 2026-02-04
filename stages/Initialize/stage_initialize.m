@@ -1,4 +1,4 @@
-function [visual_opt, device_opt, game_opt, path_opt] = stage_initialize(ID)
+function [visual_opt, device_opt, game_opt, path_opt] = stage_initialize(ID, save_path, EMUnum)
 
     %% This function is to setup options before the task starts.
     %   What to setup?
@@ -9,7 +9,7 @@ function [visual_opt, device_opt, game_opt, path_opt] = stage_initialize(ID)
     visual_opt = set_visual();
     device_opt = set_device();
     game_opt = set_game(visual_opt);
-    path_opt = save_paths(ID);
+    path_opt = save_paths(ID, save_path, EMUnum);
     save_configs(visual_opt, device_opt, game_opt, path_opt);
     disp('-------------------------------');
     disp('Complete setting options');

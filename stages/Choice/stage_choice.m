@@ -1,5 +1,5 @@
 function [resp_time, keysPressed, stage_idx] = stage_choice(...
-                            visual_opt, game_opt, device_opt, curr_opt)
+                            visual_opt, game_opt, device_opt, curr_opt, path_opt, onlineNSP, ExpEnv)
     
     visual_opt.choice_t1 = GetSecs();
                         
@@ -22,14 +22,14 @@ function [resp_time, keysPressed, stage_idx] = stage_choice(...
 
     %% Check whether enter key is pushed
     % with photodiode off prepared
-    [keysPressed,visual_opt, abort] = check_keys(device_opt, t_phd_off,visual_opt);
+    [keysPressed,visual_opt, abort] = check_keys(device_opt, path_opt, onlineNSP, ExpEnv, t_phd_off,visual_opt);
 
     %% Record response profiles once they press the Return key
     response_str = cell2mat(keysPressed.names);
     response_pos = [visual_opt.xCenter, visual_opt.yCenter];    
     resp_time = keysPressed.times-t_phd_on;
     %     disp('--------------------------------');
-    %     disp(['Subject pressed: ', response_str]); % Display which key was pressed
+    disp(['Subject pressed: ', response_str]); % Display which key was pressed
     fprintf( 'Response t: %4.2d \n', resp_time);
     %     disp('--------------------------------');
     
